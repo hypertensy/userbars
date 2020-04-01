@@ -1,0 +1,22 @@
+{
+    "name": "wnull/userbars-warface-generator",
+    "description": "A simple library to generate Warface game userbars",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vasily Heartfelt",
+            "email": "wlinkin@yandex.ru"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "WF\\Client\\": "src/WF/Client/",
+            "WF\\Draw\\": "src/WF/Draw/",
+            "WF\\Achievement\\": "src/WF/Achievements/"
+        }
+    }
+}
