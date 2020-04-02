@@ -58,4 +58,4 @@ This class consists entirely of constants that represent a specific game server.
 | EU       | 4     | Europe        |
 | US       | 5     | North America |
 
-These constants are used as the second argument in the 'Client' class.
+These constants are used as the second argument in the `Client` class.
