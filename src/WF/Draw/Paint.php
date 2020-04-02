@@ -88,7 +88,12 @@ final class Paint
 
     private function drawAchievements(): void
     {
-        foreach ($this->settings['achievement'] as $type => $value)
+        $array = $this->settings['achievement'];
+        $temp_sort = ['stripe', 'badge', 'mark'];
+
+        uksort($array, fn($k, $k2) => array_search($k, $temp_sort) > array_search($k2, $temp_sort) ? 1 : -1);
+
+        foreach ($array as $type => $value)
         {
             $obj = new \Imagick();
 
