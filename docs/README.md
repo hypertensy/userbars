@@ -3,4 +3,4 @@
 * [English](en/)
 
 ## Other
-* [Examples](/examples/)
+* [Examples](examples/)
