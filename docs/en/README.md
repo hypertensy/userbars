@@ -50,12 +50,12 @@ ServerList::const
 ```
 This class consists entirely of constants that represent a specific game server.
 
-| Константа | Значение | Сервер           |
-| --------- | -------- | ---------------- | 
-| ALPHA     | 1        | Альфа            |
-| BRAVO     | 2        | Браво            |
-| CHARLIE   | 3        | Чарли            |
-| EU        | 4        | Европа           |
-| US        | 5        | Северная Америка |
+| Constant | Value | Server        |
+| -------- | ----- | ------------- | 
+| ALPHA    | 1     | RU Alpha      |
+| BRAVO    | 2     | RU Bravo      |
+| CHARLIE  | 3     | RU Charlie    |
+| EU       | 4     | Europe        |
+| US       | 5     | North America |
 
 These constants are used as the second argument in the 'Client' class.
