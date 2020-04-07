@@ -2,6 +2,8 @@
 
 Simple and free library to generate userbars game Warface.
 
+**Read the [full documentation](/docs) before using!**
+
 ## 1. Prerequisites
 
 * PHP **7.4** or later
@@ -41,10 +43,31 @@ Before using, you should read a documentation about the functions and their para
  
 Use the `Reveal` class and pass only an array with keys: `mark`, `badge`, `stripe`.
 
-   ```php
+  ```php
   $obj = (new Paint(new Client('Эдия', ServerList::ALPHA), new Reveal(['mark' => 417, 'stripe' => 6524])))->display();
-   ```
-   
+  ```
+#### 4.3. Use with creating your own character
+
+Using the `Personage` class.
+
+   ```php
+   $personage = new Personage([
+      'lang'         =>   'en',
+      'server'       =>   5,
+      'clan_name'    =>   null,
+      'nickname'     =>   'Nickname',
+      'pvp'          =>   55.55,
+      'rank_id'      =>   90,
+      'playtime_h'   =>   0,
+      'favoritPVE'   =>   ClassesList::FIRLEMAN,
+      'pve_wins'     =>   0,
+      'favoritPVP'   =>   null,
+      'pvp_all'      =>   0,
+  ]);
+  
+  $obj = (new Paint($personage, new Reveal(['mark' => 417, 'stripe' => 6524])))->display();
+  ```
+
  After that, an image object (Imagick) is created, which can either be displayed or written to a file.
 
 ## 5. Result
