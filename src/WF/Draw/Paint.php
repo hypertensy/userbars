@@ -4,6 +4,7 @@ namespace WF\Draw;
 
 use WF\Achievement\Reveal;
 use WF\Client\Client;
+use WF\Client\Personage;
 
 final class Paint
 {
@@ -20,13 +21,13 @@ final class Paint
 
     /**
      * Paint constructor.
-     * @param Client $client
+     * @param Client|Personage $client
      * @param Reveal|null $reveal
      */
-    public function __construct(Client $client, Reveal $reveal = null)
+    public function __construct($client, Reveal $reveal = null)
     {
         if (!extension_loaded('imagick')) {
-            throw new \InvalidArgumentException('Imagick module not found');
+            throw new \InvalidArgumentException('Imagick module not found 5');
         }
 
         $this->settings = array_merge(json_decode($this->getControlSettings(), true), $client->user);
@@ -114,9 +115,9 @@ final class Paint
     {
         $data = [
             sprintf('%d %s.', $this->settings['playtime_h'] ?? 0, $this->draw['hours']),
-            $this->settings['favoritPVE'] ? $this->draw['grade'][$this->settings['favoritPVE']] : $this->draw['not'],
+            isset($this->settings['favoritPVE']) ? $this->draw['grade'][$this->settings['favoritPVE']] : $this->draw['not'],
             $this->settings['pve_wins'] ?? 0,
-            $this->settings['favoritPVP'] ? $this->draw['grade'][$this->settings['favoritPVP']] : $this->draw['not'],
+            isset($this->settings['favoritPVP']) ? $this->draw['grade'][$this->settings['favoritPVP']] : $this->draw['not'],
             $this->settings['pvp_all'] ?? 0,
             $this->settings['pvp'] ?? 0
         ];
