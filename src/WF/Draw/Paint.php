@@ -115,9 +115,9 @@ final class Paint
     {
         $data = [
             sprintf('%d %s.', $this->settings['playtime_h'] ?? 0, $this->draw['hours']),
-            isset($this->settings['favoritPVE']) ? $this->draw['grade'][$this->settings['favoritPVE']] : $this->draw['not'],
+            $this->draw['grade'][$this->settings['favoritPVE']] ?? $this->draw['not'],
             $this->settings['pve_wins'] ?? 0,
-            isset($this->settings['favoritPVP']) ? $this->draw['grade'][$this->settings['favoritPVP']] : $this->draw['not'],
+            $this->draw['grade'][$this->settings['favoritPVP']] ?? $this->draw['not'],
             $this->settings['pvp_all'] ?? 0,
             $this->settings['pvp'] ?? 0
         ];
