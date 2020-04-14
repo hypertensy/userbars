@@ -59,7 +59,7 @@ Using the `Personage` class.
       'pvp'          =>   55.55,
       'rank_id'      =>   90,
       'playtime_h'   =>   0,
-      'favoritPVE'   =>   ClassesList::FIRLEMAN,
+      'favoritPVE'   =>   ClassesList::RIFLEMAN,
       'pve_wins'     =>   0,
       'favoritPVP'   =>   null,
       'pvp_all'      =>   0,
