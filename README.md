@@ -53,7 +53,7 @@ Using the `Personage` class.
    ```php
    $personage = new Personage([
       'lang'         =>   'en',
-      'server'       =>   5,
+      'server'       =>   ServerList::US,
       'clan_name'    =>   null,
       'nickname'     =>   'Nickname',
       'pvp'          =>   55.55,
