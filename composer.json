@@ -14,7 +14,9 @@
     },
     "autoload": {
         "psr-4": {
-            "WF\\": "src/WF/"
+            "WF\\Client\\": "src/WF/Client/",
+            "WF\\Draw\\": "src/WF/Draw/",	
+            "WF\\Achievement\\": "src/WF/Achievements/"
         }
     }
 }
