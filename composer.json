@@ -1,6 +1,6 @@
 {
     "require": {
-        "php": ">=7.4"
+        "php": ">=7.4",
         "wnull/warface-api": "^3.1",
         "ext-imagick": "*",
         "ext-json": "*",
