@@ -1,7 +1,13 @@
 {
+    "name": "wnull/userbars-warface-generator",
+    "description": "Library for generating game userbars Warface on PHP",
+    "keywords": ["warface", "generator", "userbars"],
+    "type": "library",
+    "homepage": "https://github.com/wnull/userbars-warface-generator",
+    "license": "MIT",
     "require": {
-        "php": ">=7.4"
-        "wnull/warface-api": "^3.1",
+        "php": ">=7.4",
+        "wnull/warface-api": "^2.0",
         "ext-imagick": "*",
         "ext-json": "*",
         "ext-libxml": "*",
