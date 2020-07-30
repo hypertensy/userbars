@@ -1,4 +1,4 @@
-# Generator userbars for Warface 
+# Generator userbars for Warface [![Latest Stable Version](https://poser.pugx.org/wnull/userbars-warface-generator/v)](//packagist.org/packages/wnull/userbars-warface-generator) [![Total Downloads](https://poser.pugx.org/wnull/userbars-warface-generator/downloads)](//packagist.org/packages/wnull/userbars-warface-generator) [![License](https://poser.pugx.org/wnull/userbars-warface-generator/license)](//packagist.org/packages/wnull/userbars-warface-generator)
 
 Library for generating game userbars Warface on PHP.
 
