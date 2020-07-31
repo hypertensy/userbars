@@ -8,10 +8,7 @@
     "require": {
         "php": ">=7.4",
         "wnull/warface-api": "^2.0",
-        "ext-imagick": "*",
-        "ext-json": "*",
-        "ext-libxml": "*",
-        "ext-dom": "*"
+        "ext-imagick": "*"
     },
     "autoload": {
         "psr-4": {

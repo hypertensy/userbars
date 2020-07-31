@@ -7,11 +7,8 @@ Library for generating game userbars Warface on PHP.
 | Name               | Version |
 |  ---               |   ---   |
 | php                | \>=7.4  |
-| wnull/warface-api  | ^2.0    |
-| ext-imagick        | *       |
-| ext-json           | *       |
-| ext-libxml         | *       |
-| ext-dom            | *       |
+| wnull/warface-api  |  ^2.0   |
+| ext-imagick        |    *    |
 
 ## Installation
 
