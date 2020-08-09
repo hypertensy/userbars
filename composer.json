@@ -7,7 +7,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.4",
-        "wnull/warface-api": "^2.0",
+        "wnull/warface-api": "^2.1",
         "ext-imagick": "*"
     },
     "autoload": {

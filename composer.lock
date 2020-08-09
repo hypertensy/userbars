@@ -1,0 +1,62 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "1ace229c003b0bbb945761852b566f1b",
+    "packages": [
+        {
+            "name": "wnull/warface-api",
+            "version": "2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wnull/warface-api.git",
+                "reference": "5efe51a2a1d44fb91a97af538c393b5277480f34"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wnull/warface-api/zipball/5efe51a2a1d44fb91a97af538c393b5277480f34",
+                "reference": "5efe51a2a1d44fb91a97af538c393b5277480f34",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-dom": "*",
+                "ext-json": "*",
+                "ext-libxml": "*",
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Warface\\": "src/warface-api"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Convenient library for working with the Warface API on PHP",
+            "homepage": "https://github.com/wnull/warface-api",
+            "keywords": [
+                "api",
+                "client",
+                "warface"
+            ],
+            "time": "2020-08-08T13:33:24+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.4",
+        "ext-imagick": "*"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
+}
