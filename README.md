@@ -1,4 +1,4 @@
-# Generator userbars for Warface [![Latest Stable Version](https://poser.pugx.org/wnull/userbars-warface-generator/v)](//packagist.org/packages/wnull/userbars-warface-generator) [![Total Downloads](https://poser.pugx.org/wnull/userbars-warface-generator/downloads)](//packagist.org/packages/wnull/userbars-warface-generator) [![License](https://poser.pugx.org/wnull/userbars-warface-generator/license)](//packagist.org/packages/wnull/userbars-warface-generator)
+# Generator userbars for Warface [![Latest Stable Version](https://poser.pugx.org/wnull/wfub/v)](//packagist.org/packages/wnull/wfub) [![Total Downloads](https://poser.pugx.org/wnull/wfub/downloads)](//packagist.org/packages/wnull/wfub) [![License](https://poser.pugx.org/wnull/wfub/license)](//packagist.org/packages/wnull/wfub)
 
 Library for generating game userbars Warface on PHP.
 
@@ -34,4 +34,4 @@ $image = $client->create();
 
 ## License
 
-This library is licensed under the [MIT License](https://github.com/wnull/warface-api/blob/master/LICENSE).
+This library is licensed under the [MIT License](https://github.com/wnull/wfub/blob/master/LICENSE).
