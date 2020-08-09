@@ -1,9 +1,9 @@
 {
-    "name": "wnull/userbars-warface-generator",
+    "name": "wnull/wfub",
     "description": "Library for generating game userbars Warface on PHP",
     "keywords": ["warface", "generator", "userbars"],
     "type": "library",
-    "homepage": "https://github.com/wnull/userbars-warface-generator",
+    "homepage": "https://github.com/wnull/wfub",
     "license": "MIT",
     "require": {
         "php": ">=7.4",

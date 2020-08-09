@@ -15,7 +15,7 @@ Library for generating game userbars Warface on PHP.
 This generator can be installed using Composer by running the following command:
 
 ```sh
-composer require wnull/userbars-warface-generator
+composer require wnull/wfub
 ```
 
 ## Example of use
