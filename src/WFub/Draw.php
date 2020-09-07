@@ -5,6 +5,7 @@ namespace WFub;
 use Warface\ApiClient;
 use Warface\RequestController;
 use Warface\Reveal\ParserAchievement;
+use WFub\Enums\Colors;
 use WFub\Enums\Type;
 
 class Draw
@@ -20,6 +21,12 @@ class Draw
     private ApiClient $client;
     private \Imagick $object;
 
+    /**
+     * Draw constructor.
+     * @param string|null $name
+     * @param int $server
+     * @param string $region
+     */
     public function __construct(?string $name, int $server, string $region = RequestController::REGION_RU)
     {
         if (!extension_loaded('imagick')) {
@@ -34,6 +41,7 @@ class Draw
     }
 
     /**
+     * Creating a ready-made image object.
      * @return \Imagick
      */
     public function create(): \Imagick
@@ -57,6 +65,7 @@ class Draw
     }
 
     /**
+     * Function for changing game statistics via a 2d array.
      * @param array $data
      */
     public function edit(array $data): void
@@ -67,6 +76,7 @@ class Draw
     }
 
     /**
+     * Function add in a 2d array of ID of achievements that will be reflected on userbar.
      * @param array $data
      */
     public function add(array $data): void
@@ -75,6 +85,7 @@ class Draw
     }
 
     /**
+     * Function of the parsing and saving achievements.
      * @param array $data
      * @return array
      */
@@ -128,6 +139,7 @@ class Draw
     }
 
     /**
+     * Function for drawing achievements.
      * @param array $list
      */
     private function drawAchievement(array $list): void
@@ -154,6 +166,9 @@ class Draw
         }
     }
 
+    /**
+     * Pre-static data overlay function (depending on the language [RU, EN]).
+     */
     private function drawType(): void
     {
         try {
@@ -167,6 +182,9 @@ class Draw
         $this->object->compositeImage($image, \Imagick::COMPOSITE_DEFAULT, 297, 14);
     }
 
+    /**
+     * Game statistics overlay function
+     */
     private function drawStatistics(): void
     {
         $short = $this->lang[$this->language];
@@ -180,37 +198,41 @@ class Draw
             $this->profile['pvp'] ?? 0
         ];
 
-        $object = $this->stamp('#ffe400', 5, true);
+        $object = $this->stamp(Colors::YELLOW, 5, true);
         $static = 12;
 
         foreach ($data as $value)
             $this->object->annotateImage($object, 317, $static += 7, 0, (string) $value);
     }
 
+    /**
+     * Overlay function of the main profile data [nickname, server, clan].
+     */
     private function drawProfile(): void
     {
         $offset = 0;
 
         if (isset($this->profile['clan_name']))
         {
-            $clan = $this->stamp('#ffe400', 12);
+            $clan = $this->stamp(Colors::YELLOW, 12);
             $this->object->annotateImage($clan, 102, 23, 0, $this->profile['clan_name']);
 
             $offset = 5;
         }
 
-        $nick = $this->stamp('#ffffff', 14);
+        $nick = $this->stamp(Colors::WHITE, 14);
         $this->object->annotateImage($nick, 102, 32 + $offset, 0, $this->profile['nickname']);
 
         $short = $this->lang[$this->language];
 
         $this->object->annotateImage(
-            $this->stamp('#ffffff', 12), 102, 45 + $offset, 0,
+            $this->stamp(Colors::WHITE, 12), 102, 45 + $offset, 0,
             sprintf('%s: %s', $short['ub']['server'], $short['servers'][$this->server])
         );
     }
 
     /**
+     * Function the trim and overlay the rank on userbar.
      * @param int $rank
      */
     private function drawRank(int $rank): void
@@ -232,6 +254,7 @@ class Draw
     }
 
     /**
+     * Function for creating the \ImagickDraw object to pass to the \Imagick object.
      * @param string $color
      * @param int $size
      * @param bool $static
