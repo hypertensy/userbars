@@ -13,11 +13,13 @@ trait Config
             'static'  => 'static.ttf'
         ],
         'images' => [
-            'catalog'    => '/Resources/Images/',
-            'background' => 'background.png',
-            'ranks'      => 'ranks_all.png',
-            'english'    => 'en_log.png',
-            'russian'    => 'ru_log.png'
+            'catalog' => '/Resources/Images/',
+            'user'    => 'user.png',
+            'clan'    => '',
+            'join'    => 'join.png',
+            'ranks'   => 'ranks_all.png',
+            'english' => 'en_log.png',
+            'russian' => 'ru_log.png'
         ],
         'cache' => [
             'catalog' => '/Resources/Cache/'

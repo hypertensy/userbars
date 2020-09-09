@@ -5,8 +5,9 @@ namespace WFub;
 use Warface\ApiClient;
 use Warface\RequestController;
 use Warface\Reveal\ParserAchievement;
-use WFub\Enums\Colors;
-use WFub\Enums\Type;
+use WFub\Enums\ColorsTypes;
+use WFub\Enums\AchievementTypes;
+use WFub\Enums\UserbarTypes;
 
 class Draw
 {
@@ -42,20 +43,34 @@ class Draw
 
     /**
      * Creating a ready-made image object.
+     * @param string $ub_type
      * @return \Imagick
      */
-    public function create(): \Imagick
+    public function create(string $ub_type = UserbarTypes::USER): \Imagick
     {
         $this->object = new \Imagick();
 
-        try {
-            $this->object->readImage(__DIR__ . $this->config['images']['catalog'] . $this->config['images']['background']);
+        try
+        {
+            $this->object->readImage(__DIR__ . $this->config['images']['catalog'] . $this->config['images'][$ub_type]);
 
             if (isset($this->list)) $this->drawAchievement($this->list);
-            $this->drawRank($this->profile['rank_id']);
-            $this->drawType();
-            $this->drawStatistics();
+
+            switch ($ub_type)
+            {
+                case UserbarTypes::USER:
+                    $this->drawStatistics();
+                    $this->drawType();
+                    break;
+
+                case UserbarTypes::JOIN:
+                case UserbarTypes::CLAN:
+                    // TODO
+                    break;
+            }
+
             $this->drawProfile();
+            $this->drawRank($this->profile['rank_id']);
         }
         catch (\ImagickException $e) {
             throw new \InvalidArgumentException($e->getMessage());
@@ -124,9 +139,9 @@ class Draw
         {
             switch ($key)
             {
-                case Type::MARK:
-                case Type::BADGE:
-                case Type::STRIPE:
+                case AchievementTypes::MARK:
+                case AchievementTypes::BADGE:
+                case AchievementTypes::STRIPE:
                     $result[$key] = $search($key, $value);
                     break;
 
@@ -146,7 +161,7 @@ class Draw
     {
         $get = $this->toolAchievement($list);
 
-        $sort = [Type::STRIPE, Type::BADGE, Type::MARK];
+        $sort = [AchievementTypes::STRIPE, AchievementTypes::BADGE, AchievementTypes::MARK];
         uksort($get, fn($k, $k2) => array_search($k, $sort) > array_search($k2, $sort) ? 1 : -1);
 
         foreach ($get as $type => $value)
@@ -159,7 +174,7 @@ class Draw
                 throw new \InvalidArgumentException($e);
             }
 
-            [$column, $x, $y] = $type === Type::STRIPE ? [256, 29, 1] : [64, 0, 0];
+            [$column, $x, $y] = $type === AchievementTypes::STRIPE ? [256, 29, 1] : [64, 0, 0];
 
             $image->thumbnailImage($column, 64, true);
             $this->object->compositeImage($image, \Imagick::COMPOSITE_DEFAULT, $x, $y);
@@ -198,7 +213,7 @@ class Draw
             $this->profile['pvp'] ?? 0
         ];
 
-        $object = $this->stamp(Colors::YELLOW, 5, true);
+        $object = $this->stamp(ColorsTypes::YELLOW, 5, true);
         $static = 12;
 
         foreach ($data as $value)
@@ -214,19 +229,19 @@ class Draw
 
         if (isset($this->profile['clan_name']))
         {
-            $clan = $this->stamp(Colors::YELLOW, 12);
+            $clan = $this->stamp(ColorsTypes::YELLOW, 12);
             $this->object->annotateImage($clan, 102, 23, 0, $this->profile['clan_name']);
 
             $offset = 5;
         }
 
-        $nick = $this->stamp(Colors::WHITE, 14);
+        $nick = $this->stamp(ColorsTypes::WHITE, 14);
         $this->object->annotateImage($nick, 102, 32 + $offset, 0, $this->profile['nickname']);
 
         $short = $this->lang[$this->language];
 
         $this->object->annotateImage(
-            $this->stamp(Colors::WHITE, 12), 102, 45 + $offset, 0,
+            $this->stamp(ColorsTypes::WHITE, 12), 102, 45 + $offset, 0,
             sprintf('%s: %s', $short['ub']['server'], $short['servers'][$this->server])
         );
     }
