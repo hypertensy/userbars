@@ -23,7 +23,7 @@ class Draw
 
     /**
      * Draw constructor.
-     * @param string|null $name
+     * @param string|int $name
      * @param int $server
      * @param string $region
      */
@@ -96,7 +96,7 @@ class Draw
         /**
          * @param $k
          * @param $item
-         * @return false|int|string
+         * @return string
          */
         $search = function($k, $item) use($getCatalog)
         {

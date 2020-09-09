@@ -9,7 +9,7 @@ $client = new WFub\Draw('Сцена', Warface\Enums\GameServer::ALPHA);
 // The addition of achievements (the value by ID)
 $client->add([
     'stripe' => 8018,
-	'badge'  => 8523
+    'badge'  => 8523
 ]);
 
 // Changing game statistics (by the key of the received player data object)
