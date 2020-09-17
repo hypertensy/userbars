@@ -44,6 +44,10 @@
                 "client",
                 "warface"
             ],
+            "support": {
+                "issues": "https://github.com/wnull/warface-api/issues",
+                "source": "https://github.com/wnull/warface-api/tree/2.1"
+            },
             "time": "2020-08-08T13:33:24+00:00"
         }
     ],
@@ -58,5 +62,5 @@
         "ext-imagick": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }
