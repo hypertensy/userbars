@@ -54,7 +54,9 @@ class Draw
         {
             $this->object->readImage(__DIR__ . $this->config['images']['catalog'] . $this->config['images'][$ub_type]);
 
-            if (isset($this->list)) $this->drawAchievement($this->list);
+            $expression = $ub_type !== UserbarTypes::CLAN;
+
+            if (isset($this->list) && $expression) $this->drawAchievement($this->list);
 
             switch ($ub_type)
             {
@@ -64,13 +66,17 @@ class Draw
                     break;
 
                 case UserbarTypes::JOIN:
+                    // TODO: Implementation of the invite userbar.
                 case UserbarTypes::CLAN:
-                    // TODO
+                    // TODO: Implementation of the clan userbar.
                     break;
             }
 
-            $this->drawProfile();
-            $this->drawRank($this->profile['rank_id']);
+            if ($expression)
+            {
+                $this->drawProfile();
+                $this->drawRank($this->profile['rank_id']);
+            }
         }
         catch (\ImagickException $e) {
             throw new \InvalidArgumentException($e->getMessage());
@@ -113,7 +119,7 @@ class Draw
          * @param $item
          * @return string
          */
-        $search = function($k, $item) use($getCatalog)
+        $search = function($k, $item) use($getCatalog): string
         {
             $get = array_search($item, array_column($getCatalog, 'gid')) ?? false;
             $current = $getCatalog[$get];
@@ -146,7 +152,7 @@ class Draw
                     break;
 
                 default:
-                    throw new \InvalidArgumentException('Incorrect type');
+                    throw new \InvalidArgumentException('Incorrect type: ' . $key);
             }
         }
 
@@ -204,11 +210,13 @@ class Draw
     {
         $short = $this->lang[$this->language];
 
+        $g_class = fn (string $g): string => $short['classes'][$this->profile['favoritPV' . $g]] ?? $short['ub']['no_class'];
+
         $data = [
             sprintf('%d %s.', $this->profile['playtime_h'] ?? 0, $short['ub']['hours']),
-            $short['classes'][$this->profile['favoritPVE']] ?? $short['ub']['no_class'],
+            $g_class('E'),
             $this->profile['pve_wins'] ?? 0,
-            $short['classes'][$this->profile['favoritPVP']] ?? $short['ub']['no_class'],
+            $g_class('P'),
             $this->profile['pvp_all'] ?? 0,
             $this->profile['pvp'] ?? 0
         ];
@@ -252,10 +260,6 @@ class Draw
      */
     private function drawRank(int $rank): void
     {
-        if (!($rank >= 1 && $rank <= 90)) {
-            throw new \InvalidArgumentException('The selected rank does not exist');
-        }
-
         try {
             $image = new \Imagick();
             $image->readImage(__DIR__ . $this->config['images']['catalog'] . $this->config['images']['ranks']);
@@ -264,12 +268,12 @@ class Draw
             throw new \InvalidArgumentException($e->getMessage());
         }
 
-        $image->cropImage(32, 32, 0, ($rank - 1) * 32);
+        $image->cropImage(32, 32, 0, (($rank > 0 && $rank < 91 ? $rank : 1) - 1) * 32);
         $this->object->compositeImage($image, \Imagick::COMPOSITE_DEFAULT, 64, 18);
     }
 
     /**
-     * Function for creating the \ImagickDraw object to pass to the \Imagick object.
+     * Function for creating the ImagickDraw object to pass to the Imagick object.
      * @param string $color
      * @param int $size
      * @param bool $static
@@ -279,6 +283,7 @@ class Draw
     {
         $draw = new \ImagickDraw();
         $object = new \ImagickPixel($color);
+
         $draw->setFillColor($object);
         $draw->setFont(__DIR__ . $this->config['fonts']['catalog'] . $this->config['fonts'][$static ? 'static' : 'regular']);
         $draw->setFontSize($size);
