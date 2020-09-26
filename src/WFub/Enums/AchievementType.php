@@ -2,7 +2,7 @@
 
 namespace WFub\Enums;
 
-class AchievementTypes
+class AchievementType
 {
     public const MARK   = 'mark';
     public const BADGE  = 'badge';

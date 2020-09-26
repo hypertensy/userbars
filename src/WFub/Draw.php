@@ -4,89 +4,45 @@ namespace WFub;
 
 use Warface\ApiClient;
 use Warface\RequestController;
-use Warface\Reveal\ParserAchievement;
-use WFub\Enums\ColorsTypes;
-use WFub\Enums\AchievementTypes;
-use WFub\Enums\UserbarTypes;
+use WFub\Enums\ColorsType;
+use WFub\Enums\AchievementType;
+use WFub\Enums\UserbarType;
+use WFub\Exceptions\DrawExceptions;
 
-class Draw
+class Draw implements DrawInterface
 {
-    use Config;
+    use DrawHelperTrait;
 
     private array $profile;
-    private array $custom;
-    private array $list = [];
-    private int $server;
-    private string $language;
 
     private ApiClient $client;
     private \Imagick $object;
 
+    private object $config, $short;
+
     /**
      * Draw constructor.
-     * @param string|int $name
-     * @param int $server
      * @param string $region
      */
-    public function __construct(?string $name, int $server, string $region = RequestController::REGION_RU)
+    public function __construct(string $region = RequestController::REGION_RU)
     {
-        if (!extension_loaded('imagick')) {
-            throw new \InvalidArgumentException('Imagick not found');
-        }
-
         $this->client = new ApiClient($region);
-        $this->profile = $this->client->user()->stat($name, $server, 1);
 
-        $this->server = $server;
-        $this->language = ($region == RequestController::REGION_RU) ? 'russian' : 'english';
+        $this->config = $this->_convertToStd($this->_config);
+        $this->short = $this->_convertToStd($this->_multilanguage)->{$this->client->region_lang};
     }
 
     /**
-     * Creating a ready-made image object.
-     * @param string $ub_type
-     * @return \Imagick
+     * @param string|int $name
+     * @param int $server
      */
-    public function create(string $ub_type = UserbarTypes::USER): \Imagick
+    public function get(?string $name, int $server): void
     {
-        $this->object = new \Imagick();
-
-        try
-        {
-            $this->object->readImage(__DIR__ . $this->config['images']['catalog'] . $this->config['images'][$ub_type]);
-
-            $expression = $ub_type !== UserbarTypes::CLAN;
-
-            if (isset($this->list) && $expression) $this->drawAchievement($this->list);
-
-            switch ($ub_type)
-            {
-                case UserbarTypes::USER:
-                    $this->drawStatistics();
-                    $this->drawType();
-                    break;
-
-                case UserbarTypes::JOIN:
-                    // TODO: Implementation of the invite userbar.
-                case UserbarTypes::CLAN:
-                    // TODO: Implementation of the clan userbar.
-                    break;
-            }
-
-            if ($expression)
-            {
-                $this->drawProfile();
-                $this->drawRank($this->profile['rank_id']);
-            }
-        }
-        catch (\ImagickException $e) {
-            throw new \InvalidArgumentException($e->getMessage());
-        }
-
-        return $this->object;
+        $this->profile = $this->client->user()->stat($name, $server, 1);
+        $this->profile['server'] = $server;
     }
 
     /**
-     * Function for changing game statistics via a 2d array.
      * @param array $data
      */
     public function edit(array $data): void
@@ -97,123 +53,60 @@ class Draw
     }
 
     /**
-     * Function add in a 2d array of ID of achievements that will be reflected on userbar.
      * @param array $data
      */
     public function add(array $data): void
     {
-        $this->list = $data;
+        $this->profile['list'] = $data;
     }
 
     /**
-     * Function of the parsing and saving achievements.
-     * @param array $data
-     * @return array
+     * @param string $ubType
+     * @return \Imagick
+     * @throws DrawExceptions
      */
-    private function toolAchievement(array $data): array
+    public function create(string $ubType = UserbarType::USER): \Imagick
     {
-        $getCatalog = $this->client->achievement()->catalog();
+        $this->object = $this->_readObjectImage($ubType);
+        $n_expression = $ubType !== UserbarType::CLAN;
 
+        if (isset($this->profile['list']) && $n_expression) {
+            $this->drawAchievement();
+        }
+
+        switch ($ubType)
+        {
+            case UserbarType::USER:
+                $this->drawStatistics();
+                $this->drawType();
+                break;
+
+            case UserbarType::JOIN:
+                // TODO: Implementation of the invite userbar.
+            case UserbarType::CLAN:
+                // TODO: Implementation of the clan userbar.
+                break;
+        }
+
+        if ($n_expression)
+        {
+            $this->drawProfile();
+            $this->drawRank();
+        }
+
+        return $this->object;
+    }
+
+    public function drawStatistics(): void
+    {
         /**
-         * @param $k
-         * @param $item
+         * @param string $el
          * @return string
          */
-        $search = function($k, $item) use($getCatalog): string
-        {
-            $get = array_search($item, array_column($getCatalog, 'gid')) ?? false;
-            $current = $getCatalog[$get];
-
-            $type = explode('/', $current['img'])[2];
-
-            if (!$get || $type !== $k) {
-                throw new \InvalidArgumentException('Achievement not found');
-            }
-
-            $file = $this->config['cache']['catalog'] . basename($current['img']);
-
-            if (!file_exists($file)) {
-                $parser = new ParserAchievement();
-                $parser->saveImage(ParserAchievement::HOST . $current['img'], __DIR__ . $file);
-            }
-
-            return $file;
-        };
-
-        $result = [];
-        foreach ($data as $key => $value)
-        {
-            switch ($key)
-            {
-                case AchievementTypes::MARK:
-                case AchievementTypes::BADGE:
-                case AchievementTypes::STRIPE:
-                    $result[$key] = $search($key, $value);
-                    break;
-
-                default:
-                    throw new \InvalidArgumentException('Incorrect type: ' . $key);
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Function for drawing achievements.
-     * @param array $list
-     */
-    private function drawAchievement(array $list): void
-    {
-        $get = $this->toolAchievement($list);
-
-        $sort = [AchievementTypes::STRIPE, AchievementTypes::BADGE, AchievementTypes::MARK];
-        uksort($get, fn($k, $k2) => array_search($k, $sort) > array_search($k2, $sort) ? 1 : -1);
-
-        foreach ($get as $type => $value)
-        {
-            try {
-                $image = new \Imagick();
-                $image->readImage(__DIR__ . $value);
-            }
-            catch (\ImagickException $e) {
-                throw new \InvalidArgumentException($e);
-            }
-
-            [$column, $x, $y] = $type === AchievementTypes::STRIPE ? [256, 29, 1] : [64, 0, 0];
-
-            $image->thumbnailImage($column, 64, true);
-            $this->object->compositeImage($image, \Imagick::COMPOSITE_DEFAULT, $x, $y);
-        }
-    }
-
-    /**
-     * Pre-static data overlay function (depending on the language [RU, EN]).
-     */
-    private function drawType(): void
-    {
-        try {
-            $image = new \Imagick();
-            $image->readImage(__DIR__ . $this->config['images']['catalog'] . $this->config['images'][$this->language]);
-        }
-        catch (\ImagickException $e) {
-            throw new \InvalidArgumentException($e->getMessage());
-        }
-
-        $this->object->compositeImage($image, \Imagick::COMPOSITE_DEFAULT, 297, 14);
-    }
-
-    /**
-     * Game statistics overlay function
-     */
-    private function drawStatistics(): void
-    {
-        $short = $this->lang[$this->language];
-
-        $g_class = fn (string $g): string => $short['classes'][$this->profile['favoritPV' . $g]] ?? $short['ub']['no_class'];
+        $g_class = fn (string $el): string => $this->short->classes->{$this->profile['favoritPV' . $el]} ?? $this->short->ub->no_class;
 
         $data = [
-            sprintf('%d %s.', $this->profile['playtime_h'] ?? 0, $short['ub']['hours']),
+            sprintf('%d %s.', $this->profile['playtime_h'] ?? 0, $this->short->ub->hours),
             $g_class('E'),
             $this->profile['pve_wins'] ?? 0,
             $g_class('P'),
@@ -221,73 +114,90 @@ class Draw
             $this->profile['pvp'] ?? 0
         ];
 
-        $object = $this->stamp(ColorsTypes::YELLOW, 5, true);
+        $object = $this->_createObjectFont(ColorsType::YELLOW, 5, 'static');
         $static = 12;
 
         foreach ($data as $value)
             $this->object->annotateImage($object, 317, $static += 7, 0, (string) $value);
     }
 
-    /**
-     * Overlay function of the main profile data [nickname, server, clan].
-     */
-    private function drawProfile(): void
+    public function drawProfile(): void
     {
         $offset = 0;
 
-        if (isset($this->profile['clan_name']))
+        if ($this->profile['clan_name'] !== false)
         {
-            $clan = $this->stamp(ColorsTypes::YELLOW, 12);
+            $clan = $this->_createObjectFont(ColorsType::YELLOW, 12);
             $this->object->annotateImage($clan, 102, 23, 0, $this->profile['clan_name']);
 
             $offset = 5;
         }
 
-        $nick = $this->stamp(ColorsTypes::WHITE, 14);
+        $nick = $this->_createObjectFont(ColorsType::WHITE, 14);
         $this->object->annotateImage($nick, 102, 32 + $offset, 0, $this->profile['nickname']);
 
-        $short = $this->lang[$this->language];
-
         $this->object->annotateImage(
-            $this->stamp(ColorsTypes::WHITE, 12), 102, 45 + $offset, 0,
-            sprintf('%s: %s', $short['ub']['server'], $short['servers'][$this->server])
+            $this->_createObjectFont(ColorsType::WHITE, 12), 102, 45 + $offset, 0,
+            sprintf('%s: %s', $this->short->ub->server, $this->short->servers->{$this->profile['server']})
         );
     }
 
     /**
-     * Function the trim and overlay the rank on userbar.
-     * @param int $rank
+     * @throws DrawExceptions
      */
-    private function drawRank(int $rank): void
+    public function drawType(): void
     {
-        try {
-            $image = new \Imagick();
-            $image->readImage(__DIR__ . $this->config['images']['catalog'] . $this->config['images']['ranks']);
-        }
-        catch (\ImagickException $e) {
-            throw new \InvalidArgumentException($e->getMessage());
-        }
+        $image = $this->_readObjectImage('type_' . $this->client->region_lang[0]);
 
-        $image->cropImage(32, 32, 0, (($rank > 0 && $rank < 91 ? $rank : 1) - 1) * 32);
+        $this->object->compositeImage($image, \Imagick::COMPOSITE_DEFAULT, 297, 14);
+    }
+
+    /**
+     * @throws DrawExceptions
+     */
+    public function drawRank(): void
+    {
+        $image = $this->_readObjectImage('ranks');
+        $image->cropImage(32, 32, 0, ($this->profile['rank_id'] - 1) * 32);
+
         $this->object->compositeImage($image, \Imagick::COMPOSITE_DEFAULT, 64, 18);
     }
 
     /**
-     * Function for creating the ImagickDraw object to pass to the Imagick object.
-     * @param string $color
-     * @param int $size
-     * @param bool $static
-     * @return \ImagickDraw
+     * @throws DrawExceptions
      */
-    private function stamp(string $color, int $size, bool $static = false): \ImagickDraw
+    public function drawAchievement(): void
     {
-        $draw = new \ImagickDraw();
-        $object = new \ImagickPixel($color);
+        $getCatalog = $this->client->achievement()->catalog();
 
-        $draw->setFillColor($object);
-        $draw->setFont(__DIR__ . $this->config['fonts']['catalog'] . $this->config['fonts'][$static ? 'static' : 'regular']);
-        $draw->setFontSize($size);
+        $result = [];
+        $mask = [AchievementType::STRIPE, AchievementType::BADGE, AchievementType::MARK];
 
-        return $draw;
+        foreach ($this->profile['list'] as $key => $value)
+        {
+            switch ($key)
+            {
+                case AchievementType::MARK:
+                case AchievementType::BADGE:
+                case AchievementType::STRIPE:
+                    $result[$key] = $this->_parseImage($getCatalog, $key, $value);
+                    break;
+
+                default:
+                    throw new DrawExceptions('Incorrect type achievement', 2);
+            }
+        }
+
+        uksort($result, fn ($a, $b) => array_search($a, $mask) > array_search($b, $mask));
+
+        foreach ($result as $type => $value)
+        {
+            $image = $this->_readObjectImage(basename($value));
+
+            [$column, $x, $y] = $type === AchievementType::STRIPE ? [256, 29, 1] : [64, 0, 0];
+
+            $image->thumbnailImage($column, 64, true);
+            $this->object->compositeImage($image, \Imagick::COMPOSITE_DEFAULT, $x, $y);
+        }
     }
 }

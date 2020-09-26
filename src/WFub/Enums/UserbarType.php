@@ -2,7 +2,7 @@
 
 namespace WFub\Enums;
 
-class UserbarTypes
+class UserbarType
 {
     public const USER = 'user';
     public const JOIN = 'join';
