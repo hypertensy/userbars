@@ -84,7 +84,7 @@ trait DrawHelperTrait
      * @return \Imagick
      * @throws DrawExceptions
      */
-    protected function _readObjectImage(string $filename, string $subType = 'images')
+    protected function _readObjectImage(string $filename, string $subType = 'images'): \Imagick
     {
         $object = new \Imagick();
 

@@ -7,10 +7,10 @@ use WFub\Enums\UserbarType;
 interface DrawInterface
 {
     /**
-     * @param string $ub_type
+     * @param string $ubType
      * @return \Imagick
      */
-    public function create(string $ub_type = UserbarType::USER): \Imagick;
+    public function create(string $ubType = UserbarType::USER): \Imagick;
 
     /**
      * @param string|int $name
