@@ -28,7 +28,7 @@ Before using, you should read a documentation about the functions and their para
 require __DIR__ . '/vendor/autoload.php';
 
 // Creating an instance of a class
-$client = new WFub\Draw();
+$client = new WFub\Draw(\Warface\RequestController::REGION_RU);
 // Calling the function to generate an userbar with query
 $client->get('Сцена', \Warface\Enums\GameServer::ALPHA);
 

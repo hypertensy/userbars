@@ -2,7 +2,7 @@
 
 namespace WFub\Enums;
 
-class ColorsType
+class Colors
 {
     public const WHITE  = '#ffffff';
     public const YELLOW = '#ffe400';

@@ -29,5 +29,5 @@ try {
 }
 catch (\WFub\Exceptions\DrawExceptions $e) {
     // In case of an error, we display it on the screen
-    exit($e->getMessage());
+    die($e->getMessage());
 }
