@@ -54,10 +54,10 @@ class Draw extends Painting
     }
 
     /**
-     * @param string|int $name
+     * @param string $name
      * @param int $server
      */
-    public function get(?string $name, int $server): void
+    public function get(string $name, int $server): void
     {
         $this->profile = $this->client->user()->stat($name, $server, 1);
         $this->profile['server'] = $server;
