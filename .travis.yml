@@ -1,12 +1,10 @@
 language: php
 
-php:
-  - "7.4"
+php: 7.4
 
 before_script:
   - yes | pecl install imagick
-  - travis_retry composer self-update
-  - travis_retry composer install --ignore-platform-reqs --no-interaction
+  - composer self-update
+  - composer install
 
-script:
-  - phpunit
+script: vendor/bin/phpunit --debug
