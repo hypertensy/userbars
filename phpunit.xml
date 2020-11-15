@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<phpunit bootstrap="vendor/autoload.php">
-    <testsuite name="tests">
-        <directory>./tests/</directory>
+<phpunit bootstrap="vendor/autoload.php"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="true">
+    <testsuite name="Unit Tests">
+        <directory>tests</directory>
     </testsuite>
 </phpunit>
