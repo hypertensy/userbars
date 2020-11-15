@@ -2,9 +2,10 @@ language: php
 
 php:
   - "7.4"
-
-install:
-  - composer install
+  
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer install --ignore-platform-reqs --no-interaction --prefer-source
 
 script:
   - phpunit
