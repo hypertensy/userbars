@@ -4,10 +4,9 @@ php:
   - "7.4"
 
 before_script:
-  - printf "\n" | pecl install imagick
-  - php -m
+  - yes | pecl install imagick
   - travis_retry composer self-update
-  - travis_retry composer install --ignore-platform-reqs --no-interaction --prefer-source
+  - travis_retry composer install --ignore-platform-reqs --no-interaction
 
 script:
   - phpunit
