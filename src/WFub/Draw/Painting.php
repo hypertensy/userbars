@@ -5,8 +5,10 @@ namespace WFub\Draw;
 use Warface\{ApiClient, RequestController};
 use WFub\{Enums\Colors, Enums\Achievement, Exceptions\DrawExceptions};
 
-class Painting extends Pattern implements DrawInterface
+class Painting implements DrawInterface
 {
+    use DrawPattern;
+
     protected array $profile;
 
     protected ApiClient $client;

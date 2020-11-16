@@ -5,7 +5,7 @@ namespace WFub\Draw;
 use WFub\Exceptions\DrawExceptions;
 use Warface\Reveal\ParserAchievement;
 
-class Pattern
+trait DrawPattern
 {
     protected object $config;
     protected object $short;
@@ -100,7 +100,7 @@ class Pattern
     protected function _readConfigFile(string $filename): object
     {
         return json_decode(json_encode(
-                parse_ini_file(sprintf('%s/Resources/config/%s.ini', dirname(__DIR__), $filename), true)
-            ));
+            parse_ini_file(sprintf('%s/Resources/config/%s.ini', dirname(__DIR__), $filename), true)
+        ));
     }
 }
