@@ -1,8 +1,8 @@
 # Generator userbars for Warface
 
-[![Build Status](https://travis-ci.com/wnull/wfub.svg?branch=master)](https://travis-ci.com/wnull/wfub)
-[![Monthly Downloads](https://poser.pugx.org/wnull/wfub/d/monthly)](//packagist.org/packages/wnull/wfub)
-[![License](https://poser.pugx.org/wnull/wfub/license)](//packagist.org/packages/wnull/wfub)
+[![Travis (.org)](https://img.shields.io/travis/wnull/wfub?style=flat-square)](https://travis-ci.com/wnull/wfub)
+[![Packagist Downloads](https://img.shields.io/packagist/dm/wnull/wfub?color=informational&style=flat-square)](//packagist.org/packages/wnull/wfub)
+[![Packagist License](https://img.shields.io/packagist/l/wnull/wfub?style=flat-square)](//packagist.org/packages/wnull/wfub)
 
 Library for generating game userbars Warface on PHP.
 
