@@ -30,10 +30,10 @@ class TestDraw extends \PHPUnit\Framework\TestCase
     {
         $valid = [
             ['name' => 'Элез',   'server' => Servers::ALPHA],
-            //['name' => 'Кломми', 'server' => Servers::BRAVO],
+            ['name' => 'Кломми', 'server' => Servers::BRAVO],
         ];
 
-        $this->draw->get('Элез', Servers::ALPHA);
+        $this->draw->get(...$this->randomItemArgs($valid));
 
         $generate = $this->draw->create('user');
 

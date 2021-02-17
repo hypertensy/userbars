@@ -1,6 +1,7 @@
 .idea/
 vendor/
 src/Resources/cache/*
+!src/Resources/cache/.empty
 
 index.php
 composer.lock
