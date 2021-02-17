@@ -3,8 +3,8 @@ language: php
 php: 7.4
 
 before_script:
-  - yes | pecl install imagick
+  - pecl install imagick
   - composer self-update
   - composer install
 
-script: vendor/bin/phpunit --debug
+script: vendor/bin/phpunit

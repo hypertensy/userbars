@@ -1,3 +1,8 @@
 .idea/
 vendor/
-src/WFub/Resources/images/*.png
+src/Resources/cache/*
+
+index.php
+composer.lock
+
+.phpunit.result.cache

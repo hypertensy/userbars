@@ -1,22 +1,24 @@
 {
     "name": "wnull/wfub",
-    "description": "Library for generating game userbars Warface on PHP",
-    "keywords": ["warface", "generator", "userbars"],
+    "description": "",
     "type": "library",
-    "homepage": "https://github.com/wnull/wfub",
     "license": "MIT",
     "require": {
-        "php": ">=7.4",
-        "wnull/warface-api": "^2.2",
+        "wnull/warface-api": "3.0",
         "ext-imagick": "*",
         "ext-json": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.4.3"
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
-            "WFub\\": "src/WFub"
+            "WFub\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TestWFub\\": "tests/"
         }
     }
 }
